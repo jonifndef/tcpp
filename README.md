@@ -10,6 +10,7 @@
 ## List of RFC:s we probably want to implement:
 - [RFC793](https://datatracker.ietf.org/doc/html/rfc793#section-3.1) - Core functionality (Is this deprecated, which would be better to use?)
 - [RFC1122](https://datatracker.ietf.org/doc/html/rfc1122) - Congestion control
+- [RFC791](https://datatracker.ietf.org/doc/html/rfc791) - The IP Protocol
 
 ## Nice to haves:
 - [RFC2398](https://datatracker.ietf.org/doc/html/rfc2398) - Testing tools
