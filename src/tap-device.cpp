@@ -8,13 +8,13 @@
 
 TapDevice::TapDevice()
 {
-    std::cout << "hej" << std::endl;
+
 }
 
-bool TapDevice::initialize_tap_device(std::string dev)
+auto TapDevice::initialize_tap_device(std::string dev) -> bool
 {
     struct ifreq interface_request;
-    
+
     if ((m_tap_fd = open("/dev/net/tun", O_RDWR)) < 0)
     {
         std::cout << "Cannot open tap device" << std::endl;
@@ -23,7 +23,7 @@ bool TapDevice::initialize_tap_device(std::string dev)
 
     memset(&interface_request, 0, sizeof(interface_request));
 
-    interface_request.ifr_flags = IFF_TUN;
+    interface_request.ifr_flags = IFF_TAP | IFF_NO_PI;
 
     if (!dev.empty())
     {
@@ -38,6 +38,7 @@ bool TapDevice::initialize_tap_device(std::string dev)
     }
 
     dev = interface_request.ifr_name;
+
     return true;
 }
 
