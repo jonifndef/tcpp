@@ -19,6 +19,8 @@ public:
         return tapdevice;
     }
     auto initialize_tap_device(const std::string dev) -> bool;
+    auto read_data() -> int;
+    auto close_tap_device() -> void;
 private:
     TapDevice();
     ~TapDevice();

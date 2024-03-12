@@ -46,3 +46,25 @@ TapDevice::~TapDevice()
 {
 
 }
+
+auto TapDevice::read_data() -> int
+{
+    int buffer[1000];
+
+    const int len = read(m_tap_fd, buffer, sizeof(buffer));
+    if (len > 0)
+    {
+        for (const auto byte : buffer)
+        {
+            std::cout << std::hex << std::uppercase << byte;
+        }
+        std::cout << std::endl;
+    }
+
+    return len;
+}
+
+auto TapDevice::close_tap_device() -> void
+{
+    close(m_tap_fd);
+}
