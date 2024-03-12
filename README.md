@@ -15,3 +15,14 @@
 ## Nice to haves:
 - [RFC2398](https://datatracker.ietf.org/doc/html/rfc2398) - Testing tools
 - [RFC2525](https://datatracker.ietf.org/doc/html/rfc2525) - Known problems, debug help
+
+## Other tips and tricks:
+
+To set capabilities, run:
+```sudo setcap CAP_NET_ADMIN=ep my_binary```
+
+To set tap interface in up state, run:
+```sudo ip link set my_tap_interface up```
+
+To set ip addr for interface, run:
+```sudo ip addr add x.x.x.x/netmask dev my_tap_interface```
