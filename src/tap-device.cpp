@@ -6,18 +6,31 @@
 #include <linux/string.h>
 #include <sys/ioctl.h>
 
+namespace
+{
+    const std::string TUN_DEVICE = "/dev/net/tun";
+}
+
 TapDevice::TapDevice()
 {
 
 }
 
-auto TapDevice::initialize_tap_device(std::string dev) -> bool
+TapDevice::~TapDevice()
+{
+    std::cout << "Calling TapDevice destructor!" << std::endl;
+
+    close(m_tap_fd);
+}
+
+auto TapDevice::initialize(std::string dev) -> bool
 {
     struct ifreq interface_request;
 
-    if ((m_tap_fd = open("/dev/net/tun", O_RDWR)) < 0)
+    if ((m_tap_fd = open(TUN_DEVICE.c_str(), O_RDWR)) < 0)
     {
         std::cout << "Cannot open tap device" << std::endl;
+
         return false;
     }
 
@@ -29,22 +42,17 @@ auto TapDevice::initialize_tap_device(std::string dev) -> bool
     {
 	    strncpy(interface_request.ifr_name, dev.c_str(), IFNAMSIZ);
     }
-        
 
     if (ioctl(m_tap_fd, TUNSETIFF, (void*) &interface_request) < 0)
     {
 	    close(m_tap_fd);
+
 	    return false;
     }
 
     dev = interface_request.ifr_name;
 
     return true;
-}
-
-TapDevice::~TapDevice()
-{
-
 }
 
 auto TapDevice::read_data() -> int
@@ -62,9 +70,4 @@ auto TapDevice::read_data() -> int
     }
 
     return len;
-}
-
-auto TapDevice::close_tap_device() -> void
-{
-    close(m_tap_fd);
 }
