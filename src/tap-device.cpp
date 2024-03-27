@@ -6,6 +6,9 @@
 #include <linux/string.h>
 #include <sys/ioctl.h>
 
+#include "spdlog/fmt/bin_to_hex.h"
+#include "spdlog/spdlog.h"
+
 namespace
 {
     const std::string TUN_DEVICE = "/dev/net/tun";
@@ -57,16 +60,22 @@ auto TapDevice::initialize(std::string dev) -> bool
 
 auto TapDevice::read_data() -> int
 {
-    int buffer[1000];
+    std::array<uint8_t, 1000> buffer{};
 
-    const int len = read(m_tap_fd, buffer, sizeof(buffer));
+    const int len = read(m_tap_fd, buffer.data(), sizeof(buffer));
+
     if (len > 0)
     {
-        for (const auto byte : buffer)
-        {
-            std::cout << std::hex << std::uppercase << byte;
-        }
-        std::cout << std::endl;
+        spdlog::info("Read {} bytes", len);
+
+        std::array<uint8_t, 6> dst_addr{};
+        std::array<uint8_t, 6> src_addr{};
+
+        std::copy(std::begin(buffer), std::begin(buffer) + 6, std::begin(dst_addr));
+        std::copy(std::begin(buffer) + 6, std::begin(buffer) + 12, std::begin(src_addr));
+
+        spdlog::info("dst_addr: {}", spdlog::to_hex(dst_addr));
+        spdlog::info("src_addr: {}", spdlog::to_hex(src_addr));
     }
 
     return len;
