@@ -1,4 +1,5 @@
 #include "tap-device.hpp"
+#include "ethernet-frame.hpp"
 
 #include <unistd.h>
 #include <iostream>
@@ -12,6 +13,14 @@
 namespace
 {
     const std::string TUN_DEVICE = "/dev/net/tun";
+
+    namespace Pos
+    {
+        size_t dst_mac    = 0;
+        size_t src_mac    = 6;
+        size_t ether_type = 12;
+        size_t payload    = 14;
+    }
 }
 
 TapDevice::TapDevice()
@@ -21,8 +30,6 @@ TapDevice::TapDevice()
 
 TapDevice::~TapDevice()
 {
-    std::cout << "Calling TapDevice destructor!" << std::endl;
-
     close(m_tap_fd);
 }
 
@@ -60,7 +67,7 @@ auto TapDevice::initialize(std::string dev) -> bool
 
 auto TapDevice::read_data() -> int
 {
-    std::array<uint8_t, 1000> buffer{};
+    std::array<uint8_t, EthernetSizes::eth_frame_max_size> buffer{};
 
     const int len = read(m_tap_fd, buffer.data(), sizeof(buffer));
 
@@ -68,14 +75,7 @@ auto TapDevice::read_data() -> int
     {
         spdlog::info("Read {} bytes", len);
 
-        std::array<uint8_t, 6> dst_addr{};
-        std::array<uint8_t, 6> src_addr{};
-
-        std::copy(std::begin(buffer), std::begin(buffer) + 6, std::begin(dst_addr));
-        std::copy(std::begin(buffer) + 6, std::begin(buffer) + 12, std::begin(src_addr));
-
-        spdlog::info("dst_addr: {}", spdlog::to_hex(dst_addr));
-        spdlog::info("src_addr: {}", spdlog::to_hex(src_addr));
+        EthernetFrame frame(buffer);
     }
 
     return len;
