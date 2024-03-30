@@ -13,14 +13,6 @@
 namespace
 {
     const std::string TUN_DEVICE = "/dev/net/tun";
-
-    namespace Pos
-    {
-        size_t dst_mac    = 0;
-        size_t src_mac    = 6;
-        size_t ether_type = 12;
-        size_t payload    = 14;
-    }
 }
 
 TapDevice::TapDevice()
@@ -67,15 +59,15 @@ auto TapDevice::initialize(std::string dev) -> bool
 
 auto TapDevice::read_data() -> int
 {
-    std::array<uint8_t, EthernetSizes::eth_frame_max_size> buffer{};
+    std::array<uint8_t, EthernetSizes::frame_max_size> buffer{};
 
-    const int len = read(m_tap_fd, buffer.data(), sizeof(buffer));
+    const size_t len = read(m_tap_fd, buffer.data(), sizeof(buffer));
 
     if (len > 0)
     {
         spdlog::info("Read {} bytes", len);
 
-        EthernetFrame frame(buffer);
+        EthernetFrame frame(buffer, len);
     }
 
     return len;
