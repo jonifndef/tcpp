@@ -3,7 +3,7 @@
 
 #include "argparse/argparse.hpp"
 
-#include "tap-device.hpp"
+#include "tcpp.hpp"
 
 struct MyArgs : public argparse::Args
 {
@@ -14,16 +14,9 @@ int main(int argc, char **argv)
 {
     auto args = argparse::parse<MyArgs>(argc, argv);
 
-    TapDevice tap_dev{};
-    tap_dev.initialize("tap0");
+    Tcpp tcpp_app(args.num_packets);
 
-    int len = 0;
-    while (len < 4000)
-    {
-        len += tap_dev.read_data();
-
-        usleep(2);
-    }
+    tcpp_app.run();
 
     return 0;
 }

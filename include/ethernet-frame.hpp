@@ -9,6 +9,7 @@
 //inline const size_t eth_addr_size = 6;
 namespace EthernetSizes
 {
+    const size_t frame_min_size = 64;
     const size_t frame_max_size = 1514;
     const size_t addr_size      = 6;
     const size_t type_size      = 2;

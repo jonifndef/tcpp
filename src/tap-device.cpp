@@ -57,10 +57,8 @@ auto TapDevice::initialize(std::string dev) -> bool
     return true;
 }
 
-auto TapDevice::read_data() -> int
+auto TapDevice::read_data(std::array<uint8_t, EthernetSizes::frame_max_size> &buffer) -> int
 {
-    std::array<uint8_t, EthernetSizes::frame_max_size> buffer{};
-
     const size_t len = read(m_tap_fd, buffer.data(), sizeof(buffer));
 
     if (len > 0)
