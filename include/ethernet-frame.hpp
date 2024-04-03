@@ -22,6 +22,11 @@ class EthernetFrame
                       const size_t len);
         ~EthernetFrame();
 
+        auto dst_addr()   const { return m_dst_addr; }
+        auto src_addr()   const { return m_src_addr; }
+        auto ether_type() const { return m_ether_type; }
+        auto payload()    const { return m_payload; }
+
     private:
         std::array<uint8_t, EthernetSizes::addr_size> m_dst_addr{0};
         std::array<uint8_t, EthernetSizes::addr_size> m_src_addr{0};
