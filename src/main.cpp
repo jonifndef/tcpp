@@ -7,7 +7,8 @@
 
 struct MyArgs : public argparse::Args
 {
-    int &num_packets = kwarg("n,num_packets", "Number of packet to receive before exiting").set_default(5);
+    int &num_packets =
+        kwarg("n,num_packets", "Number of packet to receive before exiting").set_default(10);
 };
 
 int main(int argc, char **argv)
