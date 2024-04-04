@@ -27,14 +27,10 @@ auto Tcpp::run() -> void
     // TODO: Add timeout, infinite loop
     while (num_packets_received < m_num_packets)
     {
-        int bytes_read = tap_dev.read_data(buffer); 
+        uint32_t bytes_read = tap_dev.read_data(buffer);
 
-        if (bytes_read < EthernetSizes::frame_min_size ||
-            bytes_read > EthernetSizes::frame_max_size)
-        {
-            // append to buffer if too small?
+        if (EthernetFrame::invalid_frame_size(bytes_read))
             continue;
-        }
 
         EthernetFrame frame(buffer, bytes_read);
 

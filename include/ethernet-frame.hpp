@@ -9,7 +9,8 @@
 //inline const size_t eth_addr_size = 6;
 namespace EthernetSizes
 {
-    const size_t frame_min_size = 64;
+    // ARP package is 42 bytes long, smallest one we support right now
+    const size_t frame_min_size = 42;
     const size_t frame_max_size = 1514;
     const size_t addr_size      = 6;
     const size_t type_size      = 2;
@@ -26,6 +27,8 @@ class EthernetFrame
         auto src_addr()   const { return m_src_addr; }
         auto ether_type() const { return m_ether_type; }
         auto payload()    const { return m_payload; }
+
+        static auto invalid_frame_size(const size_t frame_size) -> bool const;
 
     private:
         std::array<uint8_t, EthernetSizes::addr_size> m_dst_addr{0};
