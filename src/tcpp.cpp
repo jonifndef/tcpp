@@ -2,6 +2,7 @@
 #include "tap-device.hpp"
 #include "ethernet-frame.hpp"
 #include "ether-types.hpp"
+#include "handle-ether-protocol.hpp"
 
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/bin_to_hex.h"
@@ -34,14 +35,19 @@ auto Tcpp::run() -> void
 
         EthernetFrame frame(buffer, bytes_read);
 
-        if (frame.ether_type() == EtherTypes::IPV4)
+        if (ETHER_PROTO_HANDLERS.count(frame.ether_type()))
         {
-            num_packets_received++;
-
-            spdlog::info("dst_addr: {}",   spdlog::to_hex(frame.dst_addr()));
-            spdlog::info("src_addr: {}",   spdlog::to_hex(frame.src_addr()));
-            spdlog::info("ether_type: {}", spdlog::to_hex(frame.ether_type()));
-            spdlog::info("payload: {}",    spdlog::to_hex(frame.payload()));
+            ETHER_PROTO_HANDLERS.at(frame.ether_type())(); 
         }
+
+        //if (frame.ether_type() == EtherTypes::IPV4)
+        //{
+        //    num_packets_received++;
+
+        //    spdlog::info("dst_addr: {}",   spdlog::to_hex(frame.dst_addr()));
+        //    spdlog::info("src_addr: {}",   spdlog::to_hex(frame.src_addr()));
+        //    spdlog::info("ether_type: {}", spdlog::to_hex(frame.ether_type()));
+        //    spdlog::info("payload: {}",    spdlog::to_hex(frame.payload()));
+        //}
     }
 }

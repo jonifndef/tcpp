@@ -32,6 +32,13 @@ EthernetFrame::~EthernetFrame()
 
 }
 
+auto EthernetFrame::handle() -> bool const
+{
+    
+
+    return false;
+}
+
 auto EthernetFrame::invalid_frame_size(const size_t frame_size) -> bool const
 {
     return (frame_size < EthernetSizes::frame_min_size ||

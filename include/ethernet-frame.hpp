@@ -28,6 +28,8 @@ class EthernetFrame
         auto ether_type() const { return m_ether_type; }
         auto payload()    const { return m_payload; }
 
+        auto handle() -> bool const;
+
         static auto invalid_frame_size(const size_t frame_size) -> bool const;
 
     private:
