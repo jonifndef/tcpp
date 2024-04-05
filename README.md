@@ -2,15 +2,17 @@
 
 ## Tell me some goals that sound good
 - No ipv6
-- Start with just ipv4
+- Start with just two protocols: ipv4 and ARP
 - Try to follow the [core guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines) as much as possible
 - Dunno
 
-## Milestones:
-- [ ] Parse ethernet frames
+## Milestones (not necessarily in order):
+- [x] Parse ethernet frames
+- [ ] Parse ARP packets
 - [ ] Parse IP packets
 - [ ] Parse TCP packets
 - [ ] Implement TCP handshake
+- [ ] Let the application set the ip link interface UP and add the ip addr
 
 ## So, what the deal with RFC:s?
 [RFC7414](https://datatracker.ietf.org/doc/html/rfc7414#section-2) is something of a list of RFC:s that you might want or not want to implement.
