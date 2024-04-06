@@ -30,10 +30,10 @@ EthernetFrame::EthernetFrame(const std::array<uint8_t, EthernetSizes::frame_max_
     std::copy(buffer.begin() + EthPos::ether_type, buffer.begin() + EthPos::payload, m_ether_type.begin());
     m_payload.insert(m_payload.end(), buffer.begin() + 14, buffer.begin() + len);
 
-    spdlog::info("Received frame with the following fields: ");
-    spdlog::info("dst_addr: {}",   spdlog::to_hex(m_dst_addr));
-    spdlog::info("src_addr: {}",   spdlog::to_hex(m_src_addr));
-    spdlog::info("ether_type: {}", spdlog::to_hex(m_ether_type));
+    spdlog::debug("Received frame with the following fields: ");
+    spdlog::debug("dst_addr: {}",   spdlog::to_hex(m_dst_addr));
+    spdlog::debug("src_addr: {}",   spdlog::to_hex(m_src_addr));
+    spdlog::debug("ether_type: {}", spdlog::to_hex(m_ether_type));
 }
 
 EthernetFrame::~EthernetFrame()
@@ -51,7 +51,7 @@ auto EthernetFrame::handle() -> bool const
     }
     else
     {
-        spdlog::info("Ethertype {} is not supported!", spdlog::to_hex(m_ether_type));
+        spdlog::debug("Ethertype {} is not supported!", spdlog::to_hex(m_ether_type));
 
         return false;
     }

@@ -61,7 +61,7 @@ auto TapDevice::read_data(std::array<uint8_t, EthernetSizes::frame_max_size> &bu
 {
     const size_t len = read(m_tap_fd, buffer.data(), sizeof(buffer));
 
-    spdlog::info("Read {} bytes", len);
+    spdlog::trace("Read {} bytes", len);
 
     return len;
 }
