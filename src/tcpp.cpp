@@ -34,20 +34,7 @@ auto Tcpp::run() -> void
             continue;
 
         EthernetFrame frame(buffer, bytes_read);
-
-        if (ETHER_PROTO_HANDLERS.count(frame.ether_type()))
-        {
-            ETHER_PROTO_HANDLERS.at(frame.ether_type())(); 
-        }
-
-        //if (frame.ether_type() == EtherTypes::IPV4)
-        //{
-        //    num_packets_received++;
-
-        //    spdlog::info("dst_addr: {}",   spdlog::to_hex(frame.dst_addr()));
-        //    spdlog::info("src_addr: {}",   spdlog::to_hex(frame.src_addr()));
-        //    spdlog::info("ether_type: {}", spdlog::to_hex(frame.ether_type()));
-        //    spdlog::info("payload: {}",    spdlog::to_hex(frame.payload()));
-        //}
+        if (frame.handle())
+            num_packets_received++;
     }
 }
