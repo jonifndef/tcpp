@@ -15,46 +15,35 @@ namespace
     const std::string TUN_DEVICE = "/dev/net/tun";
 }
 
-TapDevice::TapDevice()
-{
-
-}
-
-TapDevice::~TapDevice()
-{
-    close(m_tap_fd);
-}
-
-auto TapDevice::initialize(std::string dev) -> bool
+TapDevice::TapDevice(const std::string &devname)
 {
     struct ifreq interface_request;
 
     if ((m_tap_fd = open(TUN_DEVICE.c_str(), O_RDWR)) < 0)
     {
-        std::cout << "Cannot open tap device" << std::endl;
-
-        return false;
+        throw std::runtime_error("Cannot open tap interface");
     }
 
     memset(&interface_request, 0, sizeof(interface_request));
 
     interface_request.ifr_flags = IFF_TAP | IFF_NO_PI;
 
-    if (!dev.empty())
+    if (!devname.empty())
     {
-	    strncpy(interface_request.ifr_name, dev.c_str(), IFNAMSIZ);
+	    strncpy(interface_request.ifr_name, devname.c_str(), IFNAMSIZ);
     }
 
     if (ioctl(m_tap_fd, TUNSETIFF, (void*) &interface_request) < 0)
     {
 	    close(m_tap_fd);
 
-	    return false;
+        throw std::runtime_error("Cannot run ioctl on tap file descriptor");
     }
+}
 
-    dev = interface_request.ifr_name;
-
-    return true;
+TapDevice::~TapDevice()
+{
+    close(m_tap_fd);
 }
 
 auto TapDevice::read_data(std::array<uint8_t, EthernetSizes::frame_max_size> &buffer) -> int const

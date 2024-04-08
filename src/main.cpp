@@ -20,8 +20,7 @@ int main(int argc, char **argv)
 
     spdlog::set_level(static_cast<spdlog::level::level_enum>(args.log_level));
 
-    Tcpp tcpp_app(args.num_packets);
-
+    Tcpp tcpp_app("tap0", args.num_packets);
     tcpp_app.run();
 
     return 0;

@@ -9,10 +9,9 @@
 class TapDevice
 {
     public:
-        TapDevice();
+        TapDevice(const std::string &devname);
         ~TapDevice();
 
-        auto initialize(const std::string dev) -> bool;
         auto read_data(std::array<uint8_t, EthernetSizes::frame_max_size> &buffer) -> int const;
 
         // There should only be one instance of a tap interface at any given time
