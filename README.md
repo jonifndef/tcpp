@@ -9,7 +9,7 @@
 
 ## Milestones (not necessarily in order):
 - [x] Parse ethernet frames
-- [ ] Parse ARP packets
+- [x] Parse ARP packets
 - [ ] Parse IP packets
 - [ ] Parse TCP packets
 - [ ] Implement TCP handshake
