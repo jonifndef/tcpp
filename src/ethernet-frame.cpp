@@ -28,7 +28,7 @@ EthernetFrame::EthernetFrame(const std::array<uint8_t, EthernetSizes::frame_max_
     std::copy(buffer.begin(), buffer.begin() + EthPos::src_mac, m_dst_addr.begin());
     std::copy(buffer.begin() + EthPos::src_mac, buffer.begin() + EthPos::ether_type, m_src_addr.begin());
     std::copy(buffer.begin() + EthPos::ether_type, buffer.begin() + EthPos::payload, m_ether_type.begin());
-    m_payload.insert(m_payload.end(), buffer.begin() + 14, buffer.begin() + len);
+    m_payload.insert(m_payload.end(), buffer.begin() + EthPos::payload, buffer.begin() + len);
 
     spdlog::debug("Received frame with the following fields: ");
     spdlog::debug("dst_addr: {}",   spdlog::to_hex(m_dst_addr));

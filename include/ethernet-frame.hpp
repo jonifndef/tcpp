@@ -4,9 +4,6 @@
 #include <vector>
 #include <stdint.h>
 
-//const static size_t eth_frame_max_size = 1514;
-
-//inline const size_t eth_addr_size = 6;
 namespace EthernetSizes
 {
     // ARP package is 42 bytes long, smallest one we support right now
@@ -35,7 +32,7 @@ class EthernetFrame
     private:
         std::array<uint8_t, EthernetSizes::addr_size> m_dst_addr{0};
         std::array<uint8_t, EthernetSizes::addr_size> m_src_addr{0};
-        std::array<uint8_t, 2> m_ether_type{0};
-        std::vector<uint8_t> m_payload;
+        std::array<uint8_t, EthernetSizes::type_size> m_ether_type{0};
+        std::vector<uint8_t> m_payload{0};
         // crc not implemented yet
 };
