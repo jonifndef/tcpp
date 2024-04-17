@@ -45,7 +45,7 @@ auto EthernetFrame::handle() -> bool const
 {
     if (ETHER_PROTO_HANDLERS.count(m_ether_type))
     {
-        ETHER_PROTO_HANDLERS.at(m_ether_type)();
+        ETHER_PROTO_HANDLERS.at(m_ether_type)(m_payload);
 
         return true;
     }
