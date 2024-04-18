@@ -21,7 +21,6 @@ namespace
 
 ArpPacket::ArpPacket(std::vector<uint8_t> ethernet_payload)
 {
-    ethernet_payload.erase(ethernet_payload.begin());
     std::memcpy(&m_hardware_type, ethernet_payload.data(), sizeof(m_hardware_type));
     m_hardware_type = ntohs(m_hardware_type);
 
@@ -36,7 +35,6 @@ ArpPacket::ArpPacket(std::vector<uint8_t> ethernet_payload)
 
     m_payload.insert(m_payload.end(), ethernet_payload.begin() + ArpPos::payload, ethernet_payload.end());
 
-    spdlog::debug("Complete arp packet: {}", spdlog::to_hex(ethernet_payload));
     spdlog::debug("m_hardware_type: {:04x}", m_hardware_type);
     spdlog::debug("m_protocol_type: {:04x}", m_protocol_type);
     spdlog::debug("m_hardware_size: {:02x}", m_hardware_size);

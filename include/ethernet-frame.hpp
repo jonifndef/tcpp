@@ -33,6 +33,6 @@ class EthernetFrame
         std::array<uint8_t, EthernetSizes::addr_size> m_dst_addr{0};
         std::array<uint8_t, EthernetSizes::addr_size> m_src_addr{0};
         std::array<uint8_t, EthernetSizes::type_size> m_ether_type{0};
-        std::vector<uint8_t> m_payload{0};
+        std::vector<uint8_t> m_payload{};
         // crc not implemented yet
 };
