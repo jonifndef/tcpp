@@ -20,7 +20,7 @@ Tcpp::~Tcpp()
 auto Tcpp::run() -> void
 {
     std::array<uint8_t, EthernetSizes::frame_max_size> buffer{};
-    uint32_t num_packets_received = 0;
+    uint32_t num_packets_received{0};
 
     // TODO: Add timeout, infinite loop
     while (num_packets_received < m_num_packets)

@@ -14,9 +14,22 @@ namespace
         size_t protocol_size = 5;
         size_t opcode        = 6;
         size_t payload       = 8;
+        size_t src_mac       = 0;
+        size_t src_ip        = 6;
+        size_t dst_mac       = 10;
+        size_t dst_ip        = 16;
+        size_t end_pos       = 20;
     }
 
-    const size_t arp_pkg_min_size = 10; // don't know the actual min size yet
+    enum class HardwareType: uint16_t
+    {
+        Ethernet = 0x0001
+    };
+
+    enum class ProtocolType: uint16_t
+    {
+        IPV4 = 0x0800
+    };
 }
 
 ArpPacket::ArpPacket(std::vector<uint8_t> ethernet_payload)
@@ -41,4 +54,53 @@ ArpPacket::ArpPacket(std::vector<uint8_t> ethernet_payload)
     spdlog::debug("m_protocol_size: {:02x}", m_protocol_size);
     spdlog::debug("m_opcode: {:04x}", m_opcode);
     spdlog::debug("m_payload: {}", spdlog::to_hex(m_payload));
+}
+
+auto ArpPacket::handle() -> bool
+{
+    // We only support ethernet for now
+    if (m_hardware_type != static_cast<int>(HardwareType::Ethernet))
+        return false;
+
+    // We only support IPV4
+    switch (m_protocol_type)
+    {
+        case static_cast<int>(ProtocolType::IPV4):
+        {
+            return parse_arp_ipv4_payload();
+        }
+
+        // we only support Ethernet and IPV4 for now
+        default:
+        {
+            return false;
+        }
+    }
+}
+
+auto ArpPacket::parse_arp_ipv4_payload() -> bool
+{
+    if (m_payload.size() < ArpPos::end_pos)
+        return false;
+
+    ArpIPV4Payload payload{};
+    std::copy(m_payload.begin(),
+              m_payload.begin() + ArpPos::src_ip,
+              payload.src_mac.begin());
+    std::copy(m_payload.begin() + ArpPos::src_ip,
+              m_payload.begin() + ArpPos::dst_mac,
+              payload.src_ip.begin());
+    std::copy(m_payload.begin() + ArpPos::dst_mac,
+              m_payload.begin() + ArpPos::dst_ip,
+              payload.dst_mac.begin());
+    std::copy(m_payload.begin() + ArpPos::dst_ip,
+              m_payload.end(),
+              payload.dst_ip.begin());
+   
+    spdlog::debug("Arp payload src_mac: {}", spdlog::to_hex(payload.src_mac));
+    spdlog::debug("Arp payload src_ip: {}", spdlog::to_hex(payload.src_ip));
+    spdlog::debug("Arp payload dst_mac: {}", spdlog::to_hex(payload.dst_mac));
+    spdlog::debug("Arp payload dst_ip: {}", spdlog::to_hex(payload.dst_ip));
+
+    return true;
 }
