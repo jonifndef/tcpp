@@ -2,6 +2,7 @@
 
 #include <stdint.h>
 
+#include "arp-table.hpp"
 #include "tap-device.hpp"
 
 class Tcpp
@@ -15,4 +16,5 @@ class Tcpp
     private:
         TapDevice m_tap_dev{"tap0"};
         uint32_t m_num_packets{};
+        ArpTable m_arp_table{};
 };
