@@ -1,8 +1,11 @@
 #pragma once
 
+#include "arp.hpp"
+
 #include <stdint.h>
 #include <array>
 #include <vector>
+#include <unordered_map>
 
 struct ArpTableEntry
 {
@@ -14,8 +17,9 @@ struct ArpTableEntry
 class ArpTable
 {
     public:
-        auto update_arp_table() -> void;
+        ArpTable() = default;
+        auto update_arp_table(const ArpIPV4Payload &table_entry) -> void;
 
     private:
-        std::vector<ArpTableEntry> m_table;
+        //std::unordered_map<std::pair<uint16_t, std::array<uint8_t, 4>>, std::array<uint8_t, 6>> m_table;
 };

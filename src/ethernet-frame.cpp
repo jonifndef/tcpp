@@ -1,5 +1,4 @@
 #include "ethernet-frame.hpp"
-#include "handle-ether-protocol.hpp"
 
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/bin_to_hex.h"
@@ -43,18 +42,7 @@ EthernetFrame::~EthernetFrame()
 
 auto EthernetFrame::handle() -> bool const
 {
-    if (ETHER_PROTO_HANDLERS.count(m_ether_type))
-    {
-        ETHER_PROTO_HANDLERS.at(m_ether_type)(m_payload);
-
-        return true;
-    }
-    else
-    {
-        spdlog::debug("Ethertype {} is not supported!", spdlog::to_hex(m_ether_type));
-
-        return false;
-    }
+    return true;
 }
 
 auto EthernetFrame::invalid_frame_size(const size_t frame_size) -> bool const

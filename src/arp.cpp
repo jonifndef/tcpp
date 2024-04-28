@@ -67,7 +67,7 @@ auto ArpPacket::handle() -> bool
     {
         case static_cast<int>(ProtocolType::IPV4):
         {
-            return parse_arp_ipv4_payload();
+            return (parse_arp_ipv4_payload());
         }
 
         // we only support Ethernet and IPV4 for now
@@ -83,24 +83,23 @@ auto ArpPacket::parse_arp_ipv4_payload() -> bool
     if (m_payload.size() < ArpPos::end_pos)
         return false;
 
-    ArpIPV4Payload payload{};
     std::copy(m_payload.begin(),
               m_payload.begin() + ArpPos::src_ip,
-              payload.src_mac.begin());
+              m_arp_ipv4_payload.src_mac.begin());
     std::copy(m_payload.begin() + ArpPos::src_ip,
               m_payload.begin() + ArpPos::dst_mac,
-              payload.src_ip.begin());
+              m_arp_ipv4_payload.src_ip.begin());
     std::copy(m_payload.begin() + ArpPos::dst_mac,
               m_payload.begin() + ArpPos::dst_ip,
-              payload.dst_mac.begin());
+              m_arp_ipv4_payload.dst_mac.begin());
     std::copy(m_payload.begin() + ArpPos::dst_ip,
               m_payload.end(),
-              payload.dst_ip.begin());
+              m_arp_ipv4_payload.dst_ip.begin());
    
-    spdlog::debug("Arp payload src_mac: {}", spdlog::to_hex(payload.src_mac));
-    spdlog::debug("Arp payload src_ip: {}", spdlog::to_hex(payload.src_ip));
-    spdlog::debug("Arp payload dst_mac: {}", spdlog::to_hex(payload.dst_mac));
-    spdlog::debug("Arp payload dst_ip: {}", spdlog::to_hex(payload.dst_ip));
+    spdlog::debug("Arp payload src_mac: {}", spdlog::to_hex(m_arp_ipv4_payload.src_mac));
+    spdlog::debug("Arp payload src_ip: {}", spdlog::to_hex(m_arp_ipv4_payload.src_ip));
+    spdlog::debug("Arp payload dst_mac: {}", spdlog::to_hex(m_arp_ipv4_payload.dst_mac));
+    spdlog::debug("Arp payload dst_ip: {}", spdlog::to_hex(m_arp_ipv4_payload.dst_ip));
 
     return true;
 }
