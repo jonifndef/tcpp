@@ -12,12 +12,23 @@ struct ArpIPV4Payload
     std::array<uint8_t, 4> dst_ip{};
 };
 
+namespace Opcode
+{
+    const uint16_t request   = 0x01;
+    const uint16_t reply     = 0x02;
+    const uint16_t r_request = 0x03;
+    const uint16_t r_reply   = 0x04;
+}
+
 class ArpPacket
 {
     public:
         ArpPacket(const std::vector<uint8_t> ethernet_payload);
         auto handle() -> bool;
-        auto arp_ipv4_payload() { return m_arp_ipv4_payload; }
+
+        auto arp_ipv4_payload() { return m_arp_ipv4_payload; };
+        auto protocol_type()    { return m_protocol_type; };
+        auto opcode()           { return m_opcode; };
 
     private:
         uint16_t             m_hardware_type{0};

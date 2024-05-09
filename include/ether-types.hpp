@@ -8,11 +8,11 @@ namespace EtherTypes
 {
     constexpr std::array<uint8_t, 2> IPV4{ 0x08, 0x00 };
     constexpr std::array<uint8_t, 2>  ARP{ 0x08, 0x06 };
-    //constexpr std::array<uint8_t, 2> WAKE_ON_LAN = { 0x08, 0x42 };
-    //constexpr std::array<uint8_t, 2> CISCO_DISC_PROTO = { 0x08, 0x42 };
 };
 
 // From wikipedia:
+//  0x0842  Wake on LAN
+//  0x2000  Cisco discovery protocol
 //  0x22EA	Stream Reservation Protocol
 //  0x22F0	Audio Video Transport Protocol (AVTP)
 //  0x22F3	IETF TRILL Protocol
