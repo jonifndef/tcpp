@@ -22,7 +22,7 @@ class Tcpp
     private:
         TapDevice m_tap_dev{"tap0"};
         uint32_t m_num_packets{};
-        ArpHandler m_arp_handler{};
+        ArpHandler m_arp_handler;
         const std::map<std::array<uint8_t, EthernetSizes::type_size>, std::function<void(std::vector<uint8_t>)>> m_ether_proto_handlers;
 
         auto handle_frame(const EthernetFrame &frame) -> bool;

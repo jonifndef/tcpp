@@ -30,7 +30,7 @@ auto ArpTable::update_arp_table(ArpPacket &packet) -> void
     bool merge_flag{false};
 
     const auto key = std::pair<uint16_t, std::array<uint8_t, 4>>(packet.protocol_type(), table_entry.src_ip);
-    if (!m_table.count(key))
+    if (m_table.count(key))
     {
         m_table.at(key) = table_entry.src_mac;
         merge_flag = true;
