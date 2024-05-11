@@ -21,6 +21,5 @@ class ArpTable
         auto update_arp_table(ArpPacket &packet) -> void;
 
     private:
-        //std::unordered_map<std::pair<uint16_t, std::array<uint8_t, 4>>, std::array<uint8_t, 6>> m_table;
         std::map<std::pair<uint16_t, std::array<uint8_t, 4>>, std::array<uint8_t, 6>> m_table;
 };

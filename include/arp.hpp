@@ -30,7 +30,7 @@ class ArpPacket
         auto protocol_type()    { return m_protocol_type; };
         auto opcode()           { return m_opcode; };
 
-        //friend class ArpTable;
+        friend class ArpTable;
 
     private:
         uint16_t             m_hardware_type{0};
