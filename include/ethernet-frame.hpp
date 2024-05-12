@@ -4,6 +4,8 @@
 #include <vector>
 #include <stdint.h>
 
+class ArpPacket;
+
 namespace EthernetSizes
 {
     // ARP package is 42 bytes long, smallest one we support right now
@@ -18,6 +20,7 @@ class EthernetFrame
     public:
         EthernetFrame(const std::array<uint8_t, EthernetSizes::frame_max_size>& buffer,
                       const size_t len);
+        EthernetFrame(const ArpPacket &&packet);
         ~EthernetFrame();
 
         auto dst_addr()   const { return m_dst_addr; }

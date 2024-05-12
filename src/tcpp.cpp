@@ -50,6 +50,8 @@ auto Tcpp::run() -> void
         EthernetFrame frame(buffer, bytes_read);
         if (handle_frame(frame))
             num_packets_received++;
+
+        send_reply();
     }
 }
 
@@ -68,4 +70,12 @@ auto Tcpp::handle_frame(const EthernetFrame &frame) -> bool
         return false;
     }
 
+}
+
+auto Tcpp::send_reply() -> void
+{
+    auto packet = m_arp_out_queue.front();
+    m_arp_out_queue.pop_front();
+
+    EthernetFrame frame{std::move(packet)};
 }

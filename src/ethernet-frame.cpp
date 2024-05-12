@@ -35,6 +35,11 @@ EthernetFrame::EthernetFrame(const std::array<uint8_t, EthernetSizes::frame_max_
     spdlog::debug("ether_type: {}", spdlog::to_hex(m_ether_type));
 }
 
+EthernetFrame::EthernetFrame(const ArpPacket &&packet)
+{
+    spdlog::debug("called Ethernetframe constructor with r value reference ArpPacket!");
+}
+
 EthernetFrame::~EthernetFrame()
 {
 
