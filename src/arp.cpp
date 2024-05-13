@@ -56,6 +56,11 @@ ArpPacket::ArpPacket(std::vector<uint8_t> ethernet_payload)
     spdlog::debug("m_payload: {}", spdlog::to_hex(m_payload));
 }
 
+ArpPacket::ArpPacket(const ArpIPV4Payload &&payload)
+{
+    spdlog::debug("Called arppacket constructor with arpip4payload r value reference!");
+}
+
 auto ArpPacket::handle() -> bool
 {
     // We only support ethernet for now

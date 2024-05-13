@@ -7,6 +7,7 @@
 #include <vector>
 #include <unordered_map>
 #include <map>
+#include <optional>
 
 struct ArpTableEntry
 {
@@ -18,7 +19,7 @@ struct ArpTableEntry
 class ArpTable
 {
     public:
-        auto update_arp_table(ArpPacket &packet) -> void;
+        auto update_arp_table(ArpPacket &packet) -> std::optional<ArpIPV4Payload>;
 
     private:
         std::map<std::pair<uint16_t, std::array<uint8_t, 4>>, std::array<uint8_t, 6>> m_table;

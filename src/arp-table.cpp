@@ -4,7 +4,7 @@
 
 constexpr std::array<uint8_t, 4> my_ip{ 192, 168, 0, 1 };
 
-auto ArpTable::update_arp_table(ArpPacket &packet) -> void
+auto ArpTable::update_arp_table(ArpPacket &packet) -> std::optional<ArpIPV4Payload>
 {
     auto table_entry = packet.m_arp_ipv4_payload;
     bool merge_flag{false};
@@ -18,7 +18,7 @@ auto ArpTable::update_arp_table(ArpPacket &packet) -> void
 
     if (table_entry.dst_ip != my_ip)
     {
-        return;
+        return {};
     }
 
     if (!merge_flag)
@@ -36,5 +36,9 @@ auto ArpTable::update_arp_table(ArpPacket &packet) -> void
     if (packet.m_opcode == Opcode::request)
     {
         spdlog::debug("Send arp reply");
+
+        return ArpIPV4Payload{};
     }
+
+    return {};
 }

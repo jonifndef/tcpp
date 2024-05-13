@@ -24,6 +24,7 @@ class ArpPacket
 {
     public:
         ArpPacket(const std::vector<uint8_t> ethernet_payload);
+        ArpPacket(const ArpIPV4Payload &&payload);
         auto handle() -> bool;
 
         auto arp_ipv4_payload() { return m_arp_ipv4_payload; };

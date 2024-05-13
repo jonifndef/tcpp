@@ -18,6 +18,7 @@
 Tcpp::Tcpp(const std::string &dev_name, const uint32_t num_packets) :
     m_tap_dev(dev_name),
     m_num_packets(num_packets), 
+    m_arp_handler(std::make_unique<std::deque<ArpPacket>>(m_arp_out_queue)),
     m_ether_proto_handlers(
         {
             {EtherTypes::IPV4, [](std::vector<uint8_t> payload) {
@@ -74,6 +75,9 @@ auto Tcpp::handle_frame(const EthernetFrame &frame) -> bool
 
 auto Tcpp::send_reply() -> void
 {
+    if (m_arp_out_queue.empty())
+        return;
+
     auto packet = m_arp_out_queue.front();
     m_arp_out_queue.pop_front();
 
