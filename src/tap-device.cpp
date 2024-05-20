@@ -1,11 +1,14 @@
 #include "tap-device.hpp"
 #include "ethernet-frame.hpp"
 
+#include <arpa/inet.h>
 #include <unistd.h>
 #include <iostream>
 #include <fcntl.h>
 #include <linux/string.h>
 #include <sys/ioctl.h>
+#include <netinet/in.h>
+//#include <sys/socket.h>
 
 #include "spdlog/fmt/bin_to_hex.h"
 #include "spdlog/spdlog.h"
@@ -38,6 +41,35 @@ TapDevice::TapDevice(const std::string &devname)
 	    close(m_tap_fd);
 
         throw std::runtime_error("Cannot run ioctl on tap file descriptor");
+    }
+
+    // lskjdflksjf
+    int fd = socket(AF_INET, SOCK_DGRAM, 0);
+        if (fd < 0) {
+            perror("socket");
+        }
+
+    if (ioctl(fd, SIOCGIFFLAGS, &interface_request) != -1)
+    {
+        interface_request.ifr_flags |= IFF_UP;
+        if (ioctl(fd, SIOCSIFFLAGS, &interface_request) == -1)
+        {
+            perror("ioctl-SIOCSIFFLAGS");
+        }
+    }
+    else
+    {
+        perror("ioctl-SIOCGIFFLAGS");
+    }
+    
+    // Set IP address
+    struct sockaddr_in* addr = (struct sockaddr_in*)&interface_request.ifr_addr;
+    addr->sin_family = AF_INET;
+    inet_pton(AF_INET, "10.0.1.5", &addr->sin_addr);
+    
+    if (ioctl(fd, SIOCSIFADDR, &interface_request) == -1)
+    {
+        perror("ioctl-SIOCSIFADDR");
     }
 }
 
