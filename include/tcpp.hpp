@@ -26,6 +26,7 @@ class Tcpp
         uint32_t m_num_packets{};
         std::deque<ArpPacket> m_arp_out_queue;
         ArpHandler m_arp_handler;
+        IpAddr m_ip_addr;
 
         const std::map<std::array<uint8_t, EthernetSizes::type_size>, std::function<void(std::vector<uint8_t>)>> m_ether_proto_handlers;
 

@@ -15,6 +15,8 @@ namespace EthernetSizes
     const size_t type_size      = 2;
 }
 
+using MacAddr = std::array<uint8_t, EthernetSizes::addr_size>;
+
 class EthernetFrame
 {
     public:
@@ -33,8 +35,8 @@ class EthernetFrame
         static auto invalid_frame_size(const size_t frame_size) -> bool const;
 
     private:
-        std::array<uint8_t, EthernetSizes::addr_size> m_dst_addr{0};
-        std::array<uint8_t, EthernetSizes::addr_size> m_src_addr{0};
+        MacAddr m_dst_addr{0};
+        MacAddr m_src_addr{0};
         std::array<uint8_t, EthernetSizes::type_size> m_ether_type{0};
         std::vector<uint8_t> m_payload{};
         // crc not implemented yet

@@ -3,12 +3,11 @@
 #include "ethernet-frame.hpp"
 #include "ether-types.hpp"
 
-#include <stdint.h>
 #include <array>
 #include <functional>
+#include <iostream>
 #include <map>
 #include <stdint.h>
-#include <iostream>
 
 #include "tap-device.hpp"
 #include "ether-types.hpp"

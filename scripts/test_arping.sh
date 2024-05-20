@@ -15,7 +15,7 @@ fi
 cmake --build build
 sudo setcap CAP_NET_ADMIN=eip build/tcpp
 
-./build/tcpp --log_level 1 &
+sudo ./build/tcpp --log_level 1 &
 TCPP_PID=$!
 
 sudo ip link set tap0 up

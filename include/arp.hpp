@@ -1,15 +1,20 @@
 #pragma once
 
+#include "ethernet-frame.hpp"
+#include "ip-packet.hpp"
+
 #include <array>
 #include <vector>
 #include <stdint.h>
 
+class EthernetFrame;
+
 struct ArpIPV4Payload
 {
-    std::array<uint8_t, 6> src_mac{};
-    std::array<uint8_t, 4> src_ip{};
-    std::array<uint8_t, 6> dst_mac{};
-    std::array<uint8_t, 4> dst_ip{};
+    MacAddr src_mac{};
+    IpAddr  src_ip{};
+    MacAddr dst_mac{};
+    IpAddr  dst_ip{};
 };
 
 namespace Opcode
