@@ -18,7 +18,8 @@ namespace
     const std::string TUN_DEVICE = "/dev/net/tun";
 }
 
-TapDevice::TapDevice(const std::string &devname)
+TapDevice::TapDevice(const std::string &devname,
+                     const std::string &ip_addr)
 {
     struct ifreq interface_request;
 
@@ -43,7 +44,6 @@ TapDevice::TapDevice(const std::string &devname)
         throw std::runtime_error("Cannot run ioctl on tap file descriptor");
     }
 
-    // lskjdflksjf
     int fd = socket(AF_INET, SOCK_DGRAM, 0);
         if (fd < 0) {
             perror("socket");
@@ -65,7 +65,7 @@ TapDevice::TapDevice(const std::string &devname)
     // Set IP address
     struct sockaddr_in* addr = (struct sockaddr_in*)&interface_request.ifr_addr;
     addr->sin_family = AF_INET;
-    inet_pton(AF_INET, "10.0.1.5", &addr->sin_addr);
+    inet_pton(AF_INET, ip_addr.c_str(), &addr->sin_addr);
     
     if (ioctl(fd, SIOCSIFADDR, &interface_request) == -1)
     {

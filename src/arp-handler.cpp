@@ -1,7 +1,9 @@
 #include "arp-handler.hpp"
 
-ArpHandler::ArpHandler(std::unique_ptr<std::deque<ArpPacket>> arp_out_queue) :
-    m_arp_out_queue(std::move(arp_out_queue))
+ArpHandler::ArpHandler(std::unique_ptr<std::deque<ArpPacket>> arp_out_queue,
+                       const IpAddr &ip_addr) :
+                       m_arp_out_queue(std::move(arp_out_queue)),
+                       m_arp_table(ip_addr)
 {
 
 }

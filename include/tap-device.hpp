@@ -9,7 +9,7 @@
 class TapDevice
 {
     public:
-        TapDevice(const std::string &devname);
+        TapDevice(const std::string &devname, const std::string &ip_addr);
         ~TapDevice();
 
         auto read_data(std::array<uint8_t, EthernetSizes::frame_max_size> &buffer) -> int const;

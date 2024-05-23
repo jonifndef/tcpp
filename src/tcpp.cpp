@@ -1,7 +1,4 @@
 #include "tcpp.hpp"
-#include "tap-device.hpp"
-#include "ethernet-frame.hpp"
-#include "ether-types.hpp"
 
 #include <array>
 #include <functional>
@@ -9,15 +6,21 @@
 #include <map>
 #include <stdint.h>
 
-#include "tap-device.hpp"
 #include "ether-types.hpp"
+#include "ethernet-frame.hpp"
+#include "ip-packet.hpp"
+#include "tap-device.hpp"
+
 #include "spdlog/spdlog.h"
 #include "spdlog/fmt/bin_to_hex.h"
 
-Tcpp::Tcpp(const std::string &dev_name, const uint32_t num_packets) :
-    m_tap_dev(dev_name),
+Tcpp::Tcpp(const std::string &dev_name,
+           const uint32_t num_packets,
+           const std::string &ip_address) :
+    m_tap_dev(dev_name, ip_address),
     m_num_packets(num_packets), 
-    m_arp_handler(std::make_unique<std::deque<ArpPacket>>(m_arp_out_queue)),
+    m_ip_addr(IpPacket::str_to_ip_addr(ip_address)),
+    m_arp_handler(std::make_unique<std::deque<ArpPacket>>(m_arp_out_queue), m_ip_addr),
     m_ether_proto_handlers(
         {
             {EtherTypes::IPV4, [](std::vector<uint8_t> payload) {

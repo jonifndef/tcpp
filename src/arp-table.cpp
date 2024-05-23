@@ -2,7 +2,10 @@
 
 #include "spdlog/spdlog.h"
 
-constexpr std::array<uint8_t, 4> my_ip{ 192, 168, 0, 1 };
+ArpTable::ArpTable(const IpAddr &ip_addr) : m_ip_addr(ip_addr)
+{
+
+}
 
 auto ArpTable::update_arp_table(ArpPacket &packet) -> std::optional<ArpIPV4Payload>
 {
@@ -16,7 +19,7 @@ auto ArpTable::update_arp_table(ArpPacket &packet) -> std::optional<ArpIPV4Paylo
         merge_flag = true;
     }
 
-    if (table_entry.dst_ip != my_ip)
+    if (table_entry.dst_ip != m_ip_addr)
     {
         return {};
     }
