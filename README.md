@@ -13,7 +13,7 @@
 - [ ] Parse IP packets
 - [ ] Parse TCP packets
 - [ ] Implement TCP handshake
-- [ ] Let the application set the ip link interface UP and add the ip addr
+- [x] Let the application set the ip link interface UP and add the ip addr
 - [ ] Use epoll for read()
 
 ## So, what the deal with RFC:s?
