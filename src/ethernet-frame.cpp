@@ -50,6 +50,22 @@ auto EthernetFrame::handle() -> bool const
     return true;
 }
 
+auto EthernetFrame::serialize() -> std::vector<uint8_t> const
+{
+    auto size = EthernetSizes::addr_size * 2 +
+                EthernetSizes::type_size +
+                m_payload.size();
+
+    std::vector<uint8_t> bytes{};
+    bytes.reserve(size);
+    bytes.insert(bytes.end(), m_dst_addr.begin(), m_dst_addr.end());
+    bytes.insert(bytes.end(), m_src_addr.begin(), m_src_addr.end());
+    bytes.insert(bytes.end(), m_ether_type.begin(), m_ether_type.end());
+    bytes.insert(bytes.end(), m_payload.begin(), m_payload.end());
+
+    return bytes;
+}
+
 auto EthernetFrame::invalid_frame_size(const size_t frame_size) -> bool const
 {
     return (frame_size < EthernetSizes::frame_min_size ||

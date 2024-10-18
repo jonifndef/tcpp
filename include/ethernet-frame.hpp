@@ -31,6 +31,7 @@ class EthernetFrame
         auto payload()    const { return m_payload; }
 
         auto handle() -> bool const;
+        auto serialize() -> std::vector<uint8_t> const;
 
         static auto invalid_frame_size(const size_t frame_size) -> bool const;
 

@@ -28,6 +28,7 @@ Tcpp::Tcpp(const std::string &dev_name,
                 }
             },
             {EtherTypes::ARP, [this](std::vector<uint8_t> payload) {
+                    std::cout << "Handle arp!" << std::endl;
                     m_arp_handler.handle_arp_packet(payload);
                 }
             }
@@ -84,4 +85,5 @@ auto Tcpp::send_reply() -> void
     m_arp_out_queue.pop_front();
 
     EthernetFrame frame{std::move(packet)};
+    m_tap_dev.send_data(std::move(frame));
 }

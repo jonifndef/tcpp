@@ -45,32 +45,51 @@ TapDevice::TapDevice(const std::string &devname,
     }
 
     int fd = socket(AF_INET, SOCK_DGRAM, 0);
-        if (fd < 0) {
-            perror("socket");
-        }
+    if (fd < 0) {
+        throw std::runtime_error("Cannot create socket while setting interface up");
+    }
 
     if (ioctl(fd, SIOCGIFFLAGS, &interface_request) != -1)
     {
-        interface_request.ifr_flags |= IFF_UP;
+        interface_request.ifr_flags |= (IFF_UP | IFF_RUNNING);
         if (ioctl(fd, SIOCSIFFLAGS, &interface_request) == -1)
         {
-            perror("ioctl-SIOCSIFFLAGS");
+            close(fd);
+
+            throw std::runtime_error("Cannot run ioctl on socket to set interface up");
         }
     }
     else
     {
-        perror("ioctl-SIOCGIFFLAGS");
+        close(fd);
+
+        throw std::runtime_error("Cannot run ioctl on socket to get flags");
     }
     
-    // Set IP address
     struct sockaddr_in* addr = (struct sockaddr_in*)&interface_request.ifr_addr;
     addr->sin_family = AF_INET;
     inet_pton(AF_INET, ip_addr.c_str(), &addr->sin_addr);
     
     if (ioctl(fd, SIOCSIFADDR, &interface_request) == -1)
     {
-        perror("ioctl-SIOCSIFADDR");
+        close(fd);
+
+        throw std::runtime_error("Cannot run ioctl on socket to set ip addr");
     }
+
+    struct sockaddr_in netmask;
+    netmask.sin_family = AF_INET;
+    inet_pton(AF_INET, "255.255.255.0", &netmask.sin_addr);
+    
+    memcpy(&interface_request.ifr_netmask, &netmask, sizeof(struct sockaddr_in));
+    
+    if (ioctl(fd, SIOCSIFNETMASK, &interface_request) == -1)
+    {
+        close(fd);
+
+        throw std::runtime_error("Cannot run ioctl on socket to set netmask");
+    }
+    close(fd);
 }
 
 TapDevice::~TapDevice()
@@ -86,3 +105,10 @@ auto TapDevice::read_data(std::array<uint8_t, EthernetSizes::frame_max_size> &bu
 
     return len;
 }
+
+auto TapDevice::send_data(EthernetFrame &&frame) -> void const
+{
+    auto bytes = frame.serialize();
+    const size_t len = write(m_tap_fd, bytes.data(), bytes.size()); 
+}
+
