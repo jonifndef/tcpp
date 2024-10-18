@@ -39,3 +39,6 @@ To set tap interface in up state, run:
 
 To set ip addr for interface, run:
 ```sudo ip addr add x.x.x.x/netmask dev my_tap_interface```
+
+## Status right now:
+I am trying to add support for sending packets back to the client. When this is tested, and the whole chain is implemented from arp-handler and back to tcpp, we can answer an ARP request and show up in the kernels ARP table.
