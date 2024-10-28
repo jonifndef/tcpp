@@ -7,12 +7,12 @@ ArpTable::ArpTable(const IpAddr &ip_addr) : m_ip_addr(ip_addr)
 
 }
 
-auto ArpTable::update_arp_table(ArpPacket &packet) -> std::optional<ArpIPV4Payload>
+auto ArpTable::update_arp_table(const ArpPacket &packet) -> std::optional<ArpPacket>
 {
-    auto table_entry = packet.m_arp_ipv4_payload;
-    bool merge_flag{false};
+    auto table_entry{packet.m_arp_ipv4_payload};
+    auto merge_flag{false};
 
-    const auto key = std::pair<uint16_t, std::array<uint8_t, 4>>(packet.m_protocol_type, table_entry.src_ip);
+    const auto key = std::pair<uint16_t, IpAddr>(packet.m_protocol_type, table_entry.src_ip);
     if (m_table.count(key))
     {
         m_table.at(key) = table_entry.src_mac;
@@ -26,7 +26,7 @@ auto ArpTable::update_arp_table(ArpPacket &packet) -> std::optional<ArpIPV4Paylo
 
     if (!merge_flag)
     {
-        m_table.emplace(std::pair<uint16_t, std::array<uint8_t, 4>>(packet.m_protocol_type, table_entry.src_ip), table_entry.src_mac);
+        m_table.emplace(std::pair<uint16_t, IpAddr>(packet.m_protocol_type, table_entry.src_ip), table_entry.src_mac);
     }
 
     //      ?Is the opcode ares_op$REQUEST?  (NOW look at the opcode!!)
@@ -40,7 +40,16 @@ auto ArpTable::update_arp_table(ArpPacket &packet) -> std::optional<ArpIPV4Paylo
     {
         spdlog::debug("Send arp reply");
 
-        return ArpIPV4Payload{};
+        ArpPacket reply{std::move(packet)};
+        reply.m_opcode = Opcode::reply;
+        reply.m_arp_ipv4_payload = {
+            .src_mac = table_entry.dst_mac,
+            .src_ip  = table_entry.dst_ip,
+            .dst_mac = table_entry.src_mac,
+            .dst_ip  = table_entry.src_ip
+        };
+
+        return reply;
     }
 
     return {};

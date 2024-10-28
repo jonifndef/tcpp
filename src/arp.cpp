@@ -1,4 +1,5 @@
 #include "arp.hpp"
+
 #include <arpa/inet.h>
 
 #include "spdlog/spdlog.h"
@@ -56,11 +57,6 @@ ArpPacket::ArpPacket(std::vector<uint8_t> ethernet_payload)
     spdlog::debug("m_payload: {}", spdlog::to_hex(m_payload));
 }
 
-ArpPacket::ArpPacket(const ArpIPV4Payload &&payload)
-{
-    spdlog::debug("Called arppacket constructor with arpip4payload r value reference!");
-}
-
 auto ArpPacket::handle() -> bool
 {
     // We only support ethernet for now
@@ -100,7 +96,7 @@ auto ArpPacket::parse_arp_ipv4_payload() -> bool
     std::copy(m_payload.begin() + ArpPos::dst_ip,
               m_payload.end(),
               m_arp_ipv4_payload.dst_ip.begin());
-   
+
     spdlog::debug("Arp payload src_mac: {}", spdlog::to_hex(m_arp_ipv4_payload.src_mac));
     spdlog::debug("Arp payload src_ip: {}", spdlog::to_hex(m_arp_ipv4_payload.src_ip));
     spdlog::debug("Arp payload dst_mac: {}", spdlog::to_hex(m_arp_ipv4_payload.dst_mac));

@@ -9,20 +9,13 @@
 #include <map>
 #include <optional>
 
-struct ArpTableEntry
-{
-    uint16_t protocol_type{};
-    std::array<uint8_t, 6> mac{};
-    std::array<uint8_t, 4> ip{};
-};
-
 class ArpTable
 {
     public:
         ArpTable(const IpAddr &ip_addr);
-        auto update_arp_table(ArpPacket &packet) -> std::optional<ArpIPV4Payload>;
+        auto update_arp_table(const ArpPacket &packet) -> std::optional<ArpPacket>;
 
     private:
         IpAddr m_ip_addr;
-        std::map<std::pair<uint16_t, std::array<uint8_t, 4>>, std::array<uint8_t, 6>> m_table;
+        std::map<std::pair<uint16_t, IpAddr>, MacAddr> m_table;
 };

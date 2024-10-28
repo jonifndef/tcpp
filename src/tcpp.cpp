@@ -18,7 +18,7 @@ Tcpp::Tcpp(const std::string &dev_name,
            const uint32_t num_packets,
            const std::string &ip_address) :
     m_tap_dev(dev_name, ip_address),
-    m_num_packets(num_packets), 
+    m_num_packets(num_packets),
     m_ip_addr(IpPacket::str_to_ip_addr(ip_address)),
     m_arp_handler(std::make_unique<std::deque<ArpPacket>>(m_arp_out_queue), m_ip_addr),
     m_ether_proto_handlers(
@@ -85,5 +85,5 @@ auto Tcpp::send_reply() -> void
     m_arp_out_queue.pop_front();
 
     EthernetFrame frame{std::move(packet)};
-    m_tap_dev.send_data(std::move(frame));
+    //m_tap_dev.send_data(std::move(frame));
 }

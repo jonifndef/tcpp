@@ -8,7 +8,7 @@ class ArpPacket;
 
 namespace EthernetSizes
 {
-    // ARP package is 42 bytes long, smallest one we support right now
+    // ARP IPV4 package is 42 bytes long, smallest one we support right now
     const size_t frame_min_size = 42;
     const size_t frame_max_size = 1514;
     const size_t addr_size      = 6;

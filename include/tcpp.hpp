@@ -17,7 +17,7 @@ class Tcpp
         Tcpp(const std::string &dev_name,
              const uint32_t num_packets,
              const std::string &ip_address);
-        
+
         auto run() -> void;
 
     private:

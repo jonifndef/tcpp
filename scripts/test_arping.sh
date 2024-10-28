@@ -15,8 +15,10 @@ fi
 cmake --build build
 sudo setcap CAP_NET_ADMIN=eip build/tcpp
 
-sudo ./build/tcpp --log_level 1 &
+./build/tcpp --log_level 1 --num_packets 20 &
 TCPP_PID=$!
+
+sleep 0.5
 
 sudo arping -I tap0 10.0.1.5 &
 ARPING_PID=$!
