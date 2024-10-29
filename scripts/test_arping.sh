@@ -12,7 +12,7 @@ if [ ! -d "build" ]; then
     cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -G Ninja
 fi
 
-cmake --build build
+cmake --build build || exit -1
 sudo setcap CAP_NET_ADMIN=eip build/tcpp
 
 ./build/tcpp --log_level 1 --num_packets 20 &
