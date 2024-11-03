@@ -8,7 +8,6 @@
 #include <linux/string.h>
 #include <sys/ioctl.h>
 #include <netinet/in.h>
-//#include <sys/socket.h>
 
 #include "spdlog/fmt/bin_to_hex.h"
 #include "spdlog/spdlog.h"

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <stdint.h>
 
 #include <array>
@@ -23,7 +24,7 @@ class Tcpp
     private:
         TapDevice m_tap_dev;
         uint32_t m_num_packets{};
-        std::deque<ArpPacket> m_arp_out_queue;
+        std::shared_ptr<std::deque<ArpPacket>> m_arp_out_queue;
         IpAddr m_ip_addr;
         ArpHandler m_arp_handler;
 
