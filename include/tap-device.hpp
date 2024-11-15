@@ -12,8 +12,8 @@ class TapDevice
         TapDevice(const std::string &devname, const std::string &ip_addr);
         ~TapDevice();
 
-        auto read_data(std::array<uint8_t, EthernetSizes::frame_max_size> &buffer) -> int const;
-        auto send_data(EthernetFrame &&frame) -> void const;
+        auto read_data(std::array<uint8_t, EthernetSizes::frame_max_size> &buffer) const -> int;
+        auto send_data(const EthernetFrame &&frame) const -> void;
 
         // There should only be one instance of a tap interface at any given time
         TapDevice(const TapDevice &other)            = delete;

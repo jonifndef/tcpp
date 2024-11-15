@@ -64,11 +64,11 @@ TapDevice::TapDevice(const std::string &devname,
 
         throw std::runtime_error("Cannot run ioctl on socket to get flags");
     }
-    
+
     struct sockaddr_in* addr = (struct sockaddr_in*)&interface_request.ifr_addr;
     addr->sin_family = AF_INET;
     inet_pton(AF_INET, ip_addr.c_str(), &addr->sin_addr);
-    
+
     if (ioctl(fd, SIOCSIFADDR, &interface_request) == -1)
     {
         close(fd);
@@ -79,9 +79,9 @@ TapDevice::TapDevice(const std::string &devname,
     struct sockaddr_in netmask;
     netmask.sin_family = AF_INET;
     inet_pton(AF_INET, "255.255.255.0", &netmask.sin_addr);
-    
+
     memcpy(&interface_request.ifr_netmask, &netmask, sizeof(struct sockaddr_in));
-    
+
     if (ioctl(fd, SIOCSIFNETMASK, &interface_request) == -1)
     {
         close(fd);
@@ -96,7 +96,7 @@ TapDevice::~TapDevice()
     close(m_tap_fd);
 }
 
-auto TapDevice::read_data(std::array<uint8_t, EthernetSizes::frame_max_size> &buffer) -> int const
+auto TapDevice::read_data(std::array<uint8_t, EthernetSizes::frame_max_size> &buffer) const -> int
 {
     const size_t len = read(m_tap_fd, buffer.data(), sizeof(buffer));
 
@@ -105,9 +105,11 @@ auto TapDevice::read_data(std::array<uint8_t, EthernetSizes::frame_max_size> &bu
     return len;
 }
 
-auto TapDevice::send_data(EthernetFrame &&frame) -> void const
+auto TapDevice::send_data(const EthernetFrame &&frame) const -> void
 {
     auto bytes = frame.serialize();
-    const size_t len = write(m_tap_fd, bytes.data(), bytes.size()); 
+    const size_t len = write(m_tap_fd, bytes.data(), bytes.size());
+
+    spdlog::debug("Wrote {} bytes", len);
 }
 
