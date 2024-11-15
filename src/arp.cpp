@@ -31,6 +31,9 @@ namespace
     {
         IPV4 = 0x0800
     };
+
+    constexpr uint8_t u16_to_u8_hi(uint16_t u16) { return u16 > 8; }
+    constexpr uint8_t u16_to_u8_lo(uint16_t u16) { return u16 & 0xff; }
 }
 
 ArpPacket::ArpPacket(std::vector<uint8_t> ethernet_payload)
@@ -77,6 +80,24 @@ auto ArpPacket::handle() -> bool
             return false;
         }
     }
+}
+
+auto ArpPacket::serialize() const -> std::vector<uint8_t>
+{
+    std::vector<uint8_t> buf = {
+        u16_to_u8_hi(htons(m_hardware_type)),
+        u16_to_u8_lo(htons(m_hardware_type)),
+        u16_to_u8_hi(htons(m_protocol_type)),
+        u16_to_u8_lo(htons(m_protocol_type)),
+        m_hardware_size,
+        m_protocol_size,
+        u16_to_u8_hi(htons(m_opcode)),
+        u16_to_u8_lo(htons(m_opcode)),
+    };
+
+    buf.insert(buf.end(), m_payload.begin(), m_payload.end());
+
+    return buf;
 }
 
 auto ArpPacket::parse_arp_ipv4_payload() -> bool

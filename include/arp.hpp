@@ -35,6 +35,7 @@ class ArpPacket
         auto arp_ipv4_payload() { return m_arp_ipv4_payload; };
         auto protocol_type()    { return m_protocol_type; };
         auto opcode()           { return m_opcode; };
+        auto serialize() const -> std::vector<uint8_t>;
 
         friend class ArpTable;
 
