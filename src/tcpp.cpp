@@ -87,6 +87,7 @@ auto Tcpp::send_reply() -> void
     auto packet = m_arp_out_queue->front();
     m_arp_out_queue->pop_front();
 
-    EthernetFrame frame{std::move(packet)};
-    //m_tap_dev.send_data(std::move(frame));
+    const EthernetFrame frame{std::move(packet)};
+
+    m_tap_dev.send_data(std::move(frame));
 }

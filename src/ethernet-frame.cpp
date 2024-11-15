@@ -1,3 +1,5 @@
+#include "arp.hpp"
+#include "ether-types.hpp"
 #include "ethernet-frame.hpp"
 
 #include "spdlog/spdlog.h"
@@ -35,9 +37,15 @@ EthernetFrame::EthernetFrame(const std::array<uint8_t, EthernetSizes::frame_max_
     spdlog::debug("ether_type: {}", spdlog::to_hex(m_ether_type));
 }
 
-EthernetFrame::EthernetFrame(const ArpPacket &&packet)
+EthernetFrame::EthernetFrame(ArpPacket &&packet)
 {
-    spdlog::debug("called Ethernetframe constructor with r value reference ArpPacket!");
+    auto ipv4_payload = packet.arp_ipv4_payload();
+
+    m_src_addr   = ipv4_payload.src_mac;
+    m_dst_addr   = ipv4_payload.dst_mac;
+    m_ether_type = EtherTypes::ARP;
+
+    m_payload = packet.serialize();
 }
 
 EthernetFrame::~EthernetFrame()
@@ -45,12 +53,12 @@ EthernetFrame::~EthernetFrame()
 
 }
 
-auto EthernetFrame::handle() -> bool const
+auto EthernetFrame::handle() const -> bool
 {
     return true;
 }
 
-auto EthernetFrame::serialize() -> std::vector<uint8_t> const
+auto EthernetFrame::serialize() const -> std::vector<uint8_t>
 {
     auto size = EthernetSizes::addr_size * 2 +
                 EthernetSizes::type_size +

@@ -22,7 +22,7 @@ class EthernetFrame
     public:
         EthernetFrame(const std::array<uint8_t, EthernetSizes::frame_max_size>& buffer,
                       const size_t len);
-        EthernetFrame(const ArpPacket &&packet);
+        EthernetFrame(ArpPacket &&packet);
         ~EthernetFrame();
 
         auto dst_addr()   const { return m_dst_addr; }
