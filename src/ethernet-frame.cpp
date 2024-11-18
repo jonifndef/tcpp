@@ -39,7 +39,7 @@ EthernetFrame::EthernetFrame(const std::array<uint8_t, EthernetSizes::frame_max_
 
 EthernetFrame::EthernetFrame(ArpPacket &&packet)
 {
-    auto ipv4_payload = packet.arp_ipv4_payload();
+    const auto ipv4_payload = packet.arp_ipv4_payload();
 
     m_src_addr   = ipv4_payload.src_mac;
     m_dst_addr   = ipv4_payload.dst_mac;

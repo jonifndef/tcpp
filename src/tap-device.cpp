@@ -107,9 +107,10 @@ auto TapDevice::read_data(std::array<uint8_t, EthernetSizes::frame_max_size> &bu
 
 auto TapDevice::send_data(const EthernetFrame &&frame) const -> void
 {
-    auto bytes = frame.serialize();
+    const auto& bytes = frame.serialize();
     const size_t len = write(m_tap_fd, bytes.data(), bytes.size());
 
-    spdlog::debug("Wrote {} bytes", len);
+    spdlog::debug("Wrote {} bytes:", len);
+    spdlog::debug("{}", spdlog::to_hex(bytes));
 }
 

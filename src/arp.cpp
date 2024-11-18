@@ -84,15 +84,18 @@ auto ArpPacket::handle() -> bool
 
 auto ArpPacket::serialize() const -> std::vector<uint8_t>
 {
+    spdlog::debug("Opcode when serializing: {}", m_opcode);
+    spdlog::debug("Opcode when serializing: {}", m_protocol_type); // this one is wrong! Should be IPV4
+
     std::vector<uint8_t> buf = {
-        u16_to_u8_hi(htons(m_hardware_type)),
-        u16_to_u8_lo(htons(m_hardware_type)),
-        u16_to_u8_hi(htons(m_protocol_type)),
-        u16_to_u8_lo(htons(m_protocol_type)),
+        u16_to_u8_hi(m_hardware_type),
+        u16_to_u8_lo(m_hardware_type),
+        u16_to_u8_hi(m_protocol_type),
+        u16_to_u8_lo(m_protocol_type),
         m_hardware_size,
         m_protocol_size,
-        u16_to_u8_hi(htons(m_opcode)),
-        u16_to_u8_lo(htons(m_opcode)),
+        u16_to_u8_hi(m_opcode),
+        u16_to_u8_lo(m_opcode),
     };
 
     buf.insert(buf.end(), m_payload.begin(), m_payload.end());
