@@ -32,7 +32,7 @@ namespace
         IPV4 = 0x0800
     };
 
-    constexpr uint8_t u16_to_u8_hi(uint16_t u16) { return u16 > 8; }
+    constexpr uint8_t u16_to_u8_hi(uint16_t u16) { return u16 >> 8; }
     constexpr uint8_t u16_to_u8_lo(uint16_t u16) { return u16 & 0xff; }
 }
 
@@ -84,9 +84,6 @@ auto ArpPacket::handle() -> bool
 
 auto ArpPacket::serialize() const -> std::vector<uint8_t>
 {
-    spdlog::debug("Opcode when serializing: {}", m_opcode);
-    spdlog::debug("Opcode when serializing: {}", m_protocol_type); // this one is wrong! Should be IPV4
-
     std::vector<uint8_t> buf = {
         u16_to_u8_hi(m_hardware_type),
         u16_to_u8_lo(m_hardware_type),
@@ -98,7 +95,10 @@ auto ArpPacket::serialize() const -> std::vector<uint8_t>
         u16_to_u8_lo(m_opcode),
     };
 
-    buf.insert(buf.end(), m_payload.begin(), m_payload.end());
+    buf.insert(buf.end(), m_arp_ipv4_payload.src_mac.begin(), m_arp_ipv4_payload.src_mac.end());
+    buf.insert(buf.end(), m_arp_ipv4_payload.src_ip.begin(), m_arp_ipv4_payload.src_ip.end());
+    buf.insert(buf.end(), m_arp_ipv4_payload.dst_mac.begin(), m_arp_ipv4_payload.dst_mac.end());
+    buf.insert(buf.end(), m_arp_ipv4_payload.dst_ip.begin(), m_arp_ipv4_payload.dst_ip.end());
 
     return buf;
 }

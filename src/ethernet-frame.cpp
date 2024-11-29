@@ -41,8 +41,8 @@ EthernetFrame::EthernetFrame(ArpPacket &&packet)
 {
     const auto ipv4_payload = packet.arp_ipv4_payload();
 
-    m_src_addr   = ipv4_payload.src_mac;
     m_dst_addr   = ipv4_payload.dst_mac;
+    m_src_addr   = ipv4_payload.src_mac;
     m_ether_type = EtherTypes::ARP;
 
     m_payload = packet.serialize();
