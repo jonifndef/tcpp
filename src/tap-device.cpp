@@ -88,6 +88,23 @@ TapDevice::TapDevice(const std::string &devname,
 
         throw std::runtime_error("Cannot run ioctl on socket to set netmask");
     }
+
+    if (ioctl(fd, SIOCGIFHWADDR, &interface_request) == -1)
+    {
+        close(fd);
+
+        throw std::runtime_error("Cannot run ioctl on socket to get hardware address");
+    }
+
+    MacAddr m_mac_addr;
+    // Copy the MAC address to your member variable
+    unsigned char* hwaddr = (unsigned char*)interface_request.ifr_hwaddr.sa_data;
+    for (int i = 0; i < 6; i++) {
+        m_mac_addr[i] = hwaddr[i];
+    }
+
+    spdlog::info("Mac: {:02x}", spdlog::to_hex(m_mac_addr));
+
     close(fd);
 }
 
