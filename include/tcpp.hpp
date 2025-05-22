@@ -26,6 +26,7 @@ class Tcpp
         TapDevice m_tap_dev;
         uint32_t m_num_packets{};
         std::shared_ptr<std::deque<ArpPacket>> m_arp_out_queue;
+        MacAddr m_mac_addr;
         IpAddr m_ip_addr;
         ArpHandler m_arp_handler;
 

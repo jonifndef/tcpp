@@ -10,7 +10,7 @@
 class ArpHandler
 {
     public:
-        ArpHandler(std::shared_ptr<std::deque<ArpPacket>> arp_out_queue, const IpAddr &addr);
+        ArpHandler(std::shared_ptr<std::deque<ArpPacket>> arp_out_queue, const MacAddr &mac, const IpAddr &ip);
         auto handle_arp_packet(std::vector<uint8_t> &payload) -> bool;
 
     private:

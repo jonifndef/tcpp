@@ -21,8 +21,9 @@ Tcpp::Tcpp(const std::string &dev_name,
     m_tap_dev(dev_name, mac_address, ip_address),
     m_num_packets(num_packets),
     m_arp_out_queue(std::make_shared<std::deque<ArpPacket>>()),
+    m_mac_addr(EthernetFrame::str_to_mac_addr(mac_address)),
     m_ip_addr(IpPacket::str_to_ip_addr(ip_address)),
-    m_arp_handler(m_arp_out_queue, m_ip_addr),
+    m_arp_handler(m_arp_out_queue, m_mac_addr, m_ip_addr),
     m_ether_proto_handlers(
         {
             {EtherTypes::IPV4, [](std::vector<uint8_t> payload) {

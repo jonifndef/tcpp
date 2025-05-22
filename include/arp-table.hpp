@@ -12,10 +12,11 @@
 class ArpTable
 {
     public:
-        ArpTable(const IpAddr &ip_addr);
+        ArpTable(const MacAddr &mac, const IpAddr &ip);
         auto update_arp_table(const ArpPacket &packet) -> std::optional<ArpPacket>;
 
     private:
+        MacAddr m_mac_addr;
         IpAddr m_ip_addr;
         std::map<std::pair<uint16_t, IpAddr>, MacAddr> m_table;
 };

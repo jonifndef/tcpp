@@ -1,9 +1,10 @@
 #include "arp-handler.hpp"
 
 ArpHandler::ArpHandler(std::shared_ptr<std::deque<ArpPacket>> arp_out_queue,
-                       const IpAddr &ip_addr) :
+                       const MacAddr &mac,
+                       const IpAddr &ip) :
                        m_arp_out_queue(arp_out_queue),
-                       m_arp_table(ip_addr)
+                       m_arp_table(mac, ip)
 {
 
 }
