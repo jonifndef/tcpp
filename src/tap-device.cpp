@@ -18,6 +18,7 @@ namespace
 }
 
 TapDevice::TapDevice(const std::string &devname,
+                     const std::string &mac_addr,
                      const std::string &ip_addr)
 {
     struct ifreq interface_request;
@@ -89,14 +90,11 @@ TapDevice::TapDevice(const std::string &devname,
         throw std::runtime_error("Cannot run ioctl on socket to set netmask");
     }
 
+    MacAddr mac_addr_bytes = EthernetFrame::str_to_mac_addr(mac_addr);
+
     struct sockaddr sa;
-    sa.sa_family = AF_LOCAL;  // Ethernet type
-    sa.sa_data[0] = 0xde;
-    sa.sa_data[1] = 0x20;
-    sa.sa_data[2] = 0xde;
-    sa.sa_data[3] = 0x37;
-    sa.sa_data[4] = 0x11;
-    sa.sa_data[5] = 0x90;
+    sa.sa_family = AF_LOCAL;
+    memcpy(sa.sa_data, mac_addr_bytes.data(), 6);
 
     memcpy(&interface_request.ifr_hwaddr, &sa, sizeof(sa));
     if (ioctl(fd, SIOCSIFHWADDR, &interface_request) == -1) {
@@ -104,20 +102,6 @@ TapDevice::TapDevice(const std::string &devname,
 
         throw std::runtime_error("Failed to set MAC address");
     }
-
-    if (ioctl(fd, SIOCGIFHWADDR, &interface_request) == -1) {
-        close(fd);
-
-        throw std::runtime_error("Failed to get MAC address");
-    }
-
-    MacAddr m_mac_addr;
-    unsigned char* hwaddr = (unsigned char*)interface_request.ifr_hwaddr.sa_data;
-    for (int i = 0; i < 6; i++) {
-        m_mac_addr[i] = hwaddr[i];
-    }
-
-    spdlog::info("MAC: {:02x}", spdlog::to_hex(m_mac_addr));  // Now prints de:20:de:37:11:90
 
     close(fd);
 }

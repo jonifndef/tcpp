@@ -16,8 +16,9 @@
 
 Tcpp::Tcpp(const std::string &dev_name,
            const uint32_t num_packets,
+           const std::string &mac_address,
            const std::string &ip_address) :
-    m_tap_dev(dev_name, ip_address),
+    m_tap_dev(dev_name, mac_address, ip_address),
     m_num_packets(num_packets),
     m_arp_out_queue(std::make_shared<std::deque<ArpPacket>>()),
     m_ip_addr(IpPacket::str_to_ip_addr(ip_address)),

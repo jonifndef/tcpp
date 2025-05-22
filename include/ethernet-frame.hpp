@@ -1,8 +1,9 @@
 #pragma once
 
 #include <array>
-#include <vector>
 #include <stdint.h>
+#include <string>
+#include <vector>
 
 class ArpPacket;
 
@@ -34,6 +35,7 @@ class EthernetFrame
         auto serialize() const -> std::vector<uint8_t>;
 
         static auto invalid_frame_size(const size_t frame_size) -> bool const;
+        static auto str_to_mac_addr(const std::string &addr_str) -> MacAddr;
 
     private:
         MacAddr m_dst_addr{0};
