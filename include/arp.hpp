@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ethernet-frame.hpp"
-#include "ip-packet.hpp"
+#include "ip-datagram.hpp"
 
 #include <array>
 #include <vector>

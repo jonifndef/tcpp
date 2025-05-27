@@ -1,4 +1,4 @@
-#include "ip-packet.hpp"
+#include "ip-datagram.hpp"
 
 #include "spdlog/spdlog.h"
 //#include "spdlog/fmt/bin_to_hex.h"
@@ -7,7 +7,23 @@
 #include <sstream>
 #include <stdexcept>
 
-auto IpPacket::str_to_ip_addr(const std::string &addr_str) -> IpAddr
+namespace
+{
+    namespace IpPos
+    {
+        size_t dst_mac    = 0;
+        size_t src_mac    = 6;
+        size_t ether_type = 12;
+        size_t payload    = 14;
+    }
+}
+
+IpDatagram::IpDatagram(const std::vector<uint8_t> &buf)
+{
+
+}
+
+auto IpDatagram::str_to_ip_addr(const std::string &addr_str) -> IpAddr
 {
     IpAddr octets{};
     std::stringstream ss{addr_str};

@@ -3,7 +3,7 @@ target_sources(${PROJECT_NAME} PRIVATE
     src/arp-table.cpp
     src/arp.cpp
     src/ethernet-frame.cpp
-    src/ip-packet.cpp
+    src/ip-datagram.cpp
     src/main.cpp
     src/tap-device.cpp
     src/tcpp.cpp
