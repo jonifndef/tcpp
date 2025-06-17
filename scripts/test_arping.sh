@@ -13,9 +13,9 @@ if [ ! -d "build" ]; then
 fi
 
 cmake --build build || exit -1
-sudo setcap CAP_NET_ADMIN=eip build/tcpp
+sudo setcap CAP_NET_ADMIN=eip build/src/tcpp
 
-./build/tcpp --log_level 1 --num_packets 20 &
+./build/src/tcpp --log_level 1 --num_packets 20 &
 TCPP_PID=$!
 
 sleep 0.5
