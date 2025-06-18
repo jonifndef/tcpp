@@ -14,20 +14,4 @@ FetchContent_MakeAvailable(googletest)
 include(GoogleTest)
 enable_testing()
 
-add_executable(
-  ethernetframe_test
-  ethernetframe_test.cc
-)
-
-target_include_directories(ethernetframe_test PRIVATE ${CMAKE_SOURCE_DIR}/include)
-
-target_link_libraries(
-  ethernetframe_test
-  PRIVATE
-  tcpp_lib
-  GTest::gtest_main
-  spdlog::spdlog
-  morrisfranken::argparse
-)
-
-gtest_discover_tests(ethernetframe_test)
+add_subdirectory(unit_tests)

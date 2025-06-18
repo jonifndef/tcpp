@@ -3,7 +3,7 @@
 
 #include <array>
 
-#include "../include/ethernet-frame.hpp"
+#include "../../include/ethernet-frame.hpp"
 
 namespace {
     constexpr std::array<uint8_t, EthernetSizes::frame_max_size> buf = {

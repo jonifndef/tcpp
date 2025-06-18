@@ -15,6 +15,15 @@ struct ArpIPV4Payload
     IpAddr  src_ip{};
     MacAddr dst_mac{};
     IpAddr  dst_ip{};
+
+    bool operator==(ArpIPV4Payload const &other) const
+    {
+        return ((src_mac == other.src_mac) &&
+                (src_ip  == other.src_ip)  &&
+                (dst_mac == other.dst_mac) &&
+                (dst_ip  == other.dst_ip)
+               );
+    }
 };
 
 namespace Opcode

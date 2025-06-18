@@ -1,0 +1,26 @@
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
+
+#include <array>
+
+#include "../../include/arp.hpp"
+
+TEST(EthernetframeTest, BasicAssertions) {
+    const auto buf = std::vector<uint8_t>{ 0x00, 0x01, 0x08, 0x00, 0x06, 0x04, 0x00, 0x01, 0xde, 0x20, 0xde, 0x20, 0x11, 0x90, 0x0a, 0x00, 0x01, 0x05, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x0a, 0x00, 0x01, 0x06 };
+
+    ArpPacket packet{buf};
+    const auto res = packet.handle();
+
+    EXPECT_TRUE(res);
+
+    const auto payload = packet.arp_ipv4_payload();
+
+    constexpr ArpIPV4Payload expected_paylaod {
+        .src_mac = { 0xde, 0x20, 0xde, 0x20, 0x11, 0x90 },
+        .src_ip  = { 10, 0, 1, 5 },
+        .dst_mac = { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff },
+        .dst_ip  = { 10, 0, 1, 6 },
+    };
+
+    EXPECT_EQ(payload, expected_paylaod);
+}
