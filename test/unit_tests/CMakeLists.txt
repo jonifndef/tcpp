@@ -20,3 +20,4 @@ endfunction()
 
 add_test(ethernetframe_test)
 add_test(arppacket_test)
+add_test(ipdatagram_test)
